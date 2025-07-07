@@ -20,9 +20,6 @@ public class ItemMapper {
 
     // ItemDto → Item
     public static Item toModel(ItemDto dto) {
-        if (dto == null) {
-            return null;
-        }
         Item item = new Item();
         item.setId(dto.getId());
         item.setName(dto.getName());
