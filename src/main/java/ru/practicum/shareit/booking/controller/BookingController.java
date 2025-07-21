@@ -57,15 +57,15 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getBookingsForBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                 @RequestParam(defaultValue = "ALL") BookingState state,
-                                                 @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(defaultValue = "ALL") BookingState state,
+            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByBooker(userId, state, pageable);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsForOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                @RequestParam(defaultValue = "ALL") BookingState state,
-                                                @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(defaultValue = "ALL") BookingState state,
+            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByOwner(userId, state, pageable);
     }
 }

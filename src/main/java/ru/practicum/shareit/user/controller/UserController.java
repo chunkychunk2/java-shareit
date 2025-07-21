@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
-@Validated
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserService service;
 
@@ -37,7 +37,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
-        return service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return service.getById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @GetMapping

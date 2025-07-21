@@ -36,21 +36,24 @@ public class UserServiceImpl implements UserService {
             userValidator.validateEmailIsUnique(dto.getEmail(), dto.getId());
             existing.setEmail(dto.getEmail());
         }
-        return UserMapper.toDto(repository.update(existing));
+        return UserMapper.toDto(repository.save(existing));
     }
 
     @Override
     public Optional<UserDto> getById(Long id) {
-        return repository.findById(id).map(UserMapper::toDto);
+        return repository.findById(id)
+                .map(UserMapper::toDto);
     }
 
     @Override
     public List<UserDto> getAll() {
-        return repository.findAll().stream().map(UserMapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream()
+                .map(UserMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void delete(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
