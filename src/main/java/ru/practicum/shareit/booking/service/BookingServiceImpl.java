@@ -66,16 +66,14 @@ public class BookingServiceImpl implements BookingService {
         userValidator.validateUserExists(userId);
         LocalDateTime now = LocalDateTime.now();
         List<Booking> list = switch (state) {
-            case CURRENT  -> bookingRepository.findByBookerIdAndStartBeforeAndEndAfter(userId, now, now, pageable);
-            case PAST     -> bookingRepository.findByBookerIdAndEndIsBefore(userId, now, pageable);
-            case FUTURE   -> bookingRepository.findByBookerIdAndStartIsAfter(userId, now, pageable);
-            case WAITING  -> bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.WAITING, pageable);
+            case CURRENT -> bookingRepository.findByBookerIdAndStartBeforeAndEndAfter(userId, now, now, pageable);
+            case PAST -> bookingRepository.findByBookerIdAndEndIsBefore(userId, now, pageable);
+            case FUTURE -> bookingRepository.findByBookerIdAndStartIsAfter(userId, now, pageable);
+            case WAITING -> bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.WAITING, pageable);
             case REJECTED -> bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.REJECTED, pageable);
-            case ALL      -> bookingRepository.findByBookerId(userId, pageable);
+            case ALL -> bookingRepository.findByBookerId(userId, pageable);
         };
-        return list.stream()
-                .map(BookingMapper::toDto)
-                .collect(Collectors.toList());
+        return list.stream().map(BookingMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -83,16 +81,14 @@ public class BookingServiceImpl implements BookingService {
         userValidator.validateUserExists(userId);
         LocalDateTime now = LocalDateTime.now();
         List<Booking> list = switch (state) {
-            case CURRENT  -> bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfter(userId, now, now, pageable);
-            case PAST     -> bookingRepository.findByItemOwnerIdAndEndIsBefore(userId, now, pageable);
-            case FUTURE   -> bookingRepository.findByItemOwnerIdAndStartIsAfter(userId, now, pageable);
-            case WAITING  -> bookingRepository.findByItemOwnerIdAndStatus(userId, BookingStatus.WAITING, pageable);
+            case CURRENT -> bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfter(userId, now, now, pageable);
+            case PAST -> bookingRepository.findByItemOwnerIdAndEndIsBefore(userId, now, pageable);
+            case FUTURE -> bookingRepository.findByItemOwnerIdAndStartIsAfter(userId, now, pageable);
+            case WAITING -> bookingRepository.findByItemOwnerIdAndStatus(userId, BookingStatus.WAITING, pageable);
             case REJECTED -> bookingRepository.findByItemOwnerIdAndStatus(userId, BookingStatus.REJECTED, pageable);
-            case ALL      -> bookingRepository.findByItemOwnerId(userId, pageable);
+            case ALL -> bookingRepository.findByItemOwnerId(userId, pageable);
         };
-        return list.stream()
-                .map(BookingMapper::toDto)
-                .collect(Collectors.toList());
+        return list.stream().map(BookingMapper::toDto).collect(Collectors.toList());
     }
 }
 

@@ -41,8 +41,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getById(@PathVariable Long itemId, @RequestHeader(USER_ID_HEADER) Long userId) {
-        return service.getById(itemId, userId)
-                .orElseThrow(() -> new EntityNotFoundException("Вещь с id " + itemId + " не найдена"));
+        return service.getById(itemId, userId).orElseThrow(() -> new EntityNotFoundException("Вещь с id " + itemId + " не найдена"));
     }
 
 

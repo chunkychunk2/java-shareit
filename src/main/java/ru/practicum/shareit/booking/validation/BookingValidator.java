@@ -14,8 +14,7 @@ public class BookingValidator {
     private final BookingRepository bookingRepository;
 
     public Booking validateBookingExists(Long bookingId) {
-        return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронирование не найдено: " + bookingId));
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронирование не найдено: " + bookingId));
     }
 
     public void validateOwner(Booking booking, Long ownerId) {

@@ -13,13 +13,11 @@ public class UserValidator {
     private final UserRepository userRepository;
 
     public User validateUserExists(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден: " + userId));
+        return userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден: " + userId));
     }
 
     public void validateEmailIsUnique(String email, Long excludeId) {
-        boolean exists = userRepository.findAll().stream()
-                .anyMatch(user -> (excludeId == null || !user.getId().equals(excludeId)) && user.getEmail().equalsIgnoreCase(email));
+        boolean exists = userRepository.findAll().stream().anyMatch(user -> (excludeId == null || !user.getId().equals(excludeId)) && user.getEmail().equalsIgnoreCase(email));
         if (exists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email уже используется: " + email);
         }

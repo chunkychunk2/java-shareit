@@ -50,16 +50,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<ItemDto> getById(Long itemId, Long userId) {
-        return repository.findById(itemId)
-                .map(ItemMapper::toDto);
+        return repository.findById(itemId).map(ItemMapper::toDto);
     }
 
     @Override
     public List<ItemDto> getAllByUser(Long userId) {
-        return repository.findAll().stream()
-                .filter(item -> item.getOwner() != null && item.getOwner().getId().equals(userId))
-                .map(ItemMapper::toDto)
-                .collect(Collectors.toList());
+        return repository.findAll().stream().filter(item -> item.getOwner() != null && item.getOwner().getId().equals(userId)).map(ItemMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -68,13 +64,6 @@ public class ItemServiceImpl implements ItemService {
             return List.of();
         }
         String s = text.toLowerCase();
-        return repository.findAll().stream()
-                .filter(Item::getAvailable)
-                .filter(item ->
-                        item.getName().toLowerCase().contains(s) ||
-                                item.getDescription().toLowerCase().contains(s)
-                )
-                .map(ItemMapper::toDto)
-                .collect(Collectors.toList());
+        return repository.findAll().stream().filter(Item::getAvailable).filter(item -> item.getName().toLowerCase().contains(s) || item.getDescription().toLowerCase().contains(s)).map(ItemMapper::toDto).collect(Collectors.toList());
     }
 }

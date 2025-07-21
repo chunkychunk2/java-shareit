@@ -41,15 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> getById(Long id) {
-        return repository.findById(id)
-                .map(UserMapper::toDto);
+        return repository.findById(id).map(UserMapper::toDto);
     }
 
     @Override
     public List<UserDto> getAll() {
-        return repository.findAll().stream()
-                .map(UserMapper::toDto)
-                .collect(Collectors.toList());
+        return repository.findAll().stream().map(UserMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

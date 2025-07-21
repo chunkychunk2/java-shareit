@@ -9,13 +9,7 @@ public class ItemMapper {
         if (item == null) {
             return null;
         }
-        return new ItemDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                item.getRequest() != null ? item.getRequest().getId() : null
-        );
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(), item.getRequest() != null ? item.getRequest().getId() : null);
     }
 
     // ItemDto → Item

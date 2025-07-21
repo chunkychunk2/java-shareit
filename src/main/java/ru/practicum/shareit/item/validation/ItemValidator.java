@@ -14,8 +14,7 @@ public class ItemValidator {
     private final ItemRepository itemRepository;
 
     public Item validateItemExists(Long itemId) {
-        return itemRepository.findById(itemId)
-                .orElseThrow(() -> new ItemNotFoundException("Item not found: " + itemId));
+        return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("Item not found: " + itemId));
     }
 
     public void validateOwnership(Item item, Long userId) {

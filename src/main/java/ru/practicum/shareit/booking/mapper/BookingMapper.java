@@ -16,22 +16,10 @@ public class BookingMapper {
         if (booking == null) {
             return null;
         }
-        BookingDto.BookerInfo bk = new BookingDto.BookerInfo(
-                booking.getBooker().getId()
-        );
-        BookingDto.ItemInfo it = new BookingDto.ItemInfo(
-                booking.getItem().getId(),
-                booking.getItem().getName()
-        );
+        BookingDto.BookerInfo bk = new BookingDto.BookerInfo(booking.getBooker().getId());
+        BookingDto.ItemInfo it = new BookingDto.ItemInfo(booking.getItem().getId(), booking.getItem().getName());
 
-        return new BookingDto(
-                booking.getId(),
-                booking.getStart(),
-                booking.getEnd(),
-                booking.getStatus(),
-                bk,
-                it
-        );
+        return new BookingDto(booking.getId(), booking.getStart(), booking.getEnd(), booking.getStatus(), bk, it);
     }
 
     // BookingDto → Booking
