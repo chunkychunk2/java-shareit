@@ -1,10 +1,8 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingState;
@@ -13,6 +11,8 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.validation.BookingValidator;
+import ru.practicum.shareit.exception.BookingOwnItemException;
+import ru.practicum.shareit.exception.ItemNotAvailableException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.validation.ItemValidator;
 import ru.practicum.shareit.user.model.User;
@@ -36,10 +36,10 @@ public class BookingServiceImpl implements BookingService {
         Item item = itemValidator.validateItemExists(dto.getItemId());
 
         if (!item.getAvailable()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Вещь недоступна для бронирования");
+            throw new ItemNotAvailableException("Вещь недоступна для бронирования");
         }
         if (item.getOwner().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Нельзя бронировать свою вещь");
+            throw new BookingOwnItemException("Нельзя бронировать свою вещь");
         }
         Booking saved = bookingRepository.save(BookingMapper.toModel(user, item, dto));
         return BookingMapper.toDto(saved);
