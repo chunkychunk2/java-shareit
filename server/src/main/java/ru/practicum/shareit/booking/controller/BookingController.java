@@ -7,9 +7,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingState;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -40,9 +42,13 @@ public class BookingController {
 
     @PatchMapping
     public BookingDto approveFirstWaiting(@RequestHeader(USER_ID_HEADER) Long ownerId, @RequestParam boolean approved) {
-        return bookingRepository.findFirstByItemOwnerIdAndStatus(ownerId, BookingStatus.WAITING)
-                .map(booking -> bookingService.approve(ownerId, booking.getId(), approved))
-                .orElseThrow(() -> new EntityNotFoundException("Нет бронирований в статусе waiting"));
+        List<Booking> waiting = bookingRepository
+                .findByItemOwnerIdAndStatus(ownerId, BookingStatus.WAITING, Pageable.unpaged());
+        if (waiting.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет бронирований в статусе waiting");
+        }
+        Long bookingId = waiting.get(0).getId();
+        return bookingService.approve(ownerId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
