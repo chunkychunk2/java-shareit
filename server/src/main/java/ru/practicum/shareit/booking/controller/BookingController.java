@@ -39,13 +39,9 @@ public class BookingController {
 
     @PatchMapping
     public BookingDto approveFirstWaiting(@RequestHeader(USER_ID_HEADER) Long ownerId, @RequestParam boolean approved) {
-        List<Booking> waiting = bookingRepository
-                .findByItemOwnerIdAndStatus(ownerId, BookingStatus.WAITING, Pageable.unpaged());
-        if (waiting.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет бронирований в статусе waiting");
-        }
-        Long bookingId = waiting.get(0).getId();
-        return bookingService.approve(ownerId, bookingId, approved);
+        return bookingRepository.findFirstByItemOwnerIdAndStatus(ownerId, BookingStatus.WAITING)
+                .map(booking -> bookingService.approve(ownerId, booking.getId(), approved))
+                .orElseThrow(() -> new EntityNotFoundException("Нет бронирований в статусе waiting"));
     }
 
     @GetMapping("/{bookingId}")
