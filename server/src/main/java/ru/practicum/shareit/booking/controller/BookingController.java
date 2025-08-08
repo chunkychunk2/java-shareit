@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,7 +28,7 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingDto createBooking(@RequestHeader(USER_ID_HEADER) Long userId, @RequestBody BookingRequestDto dto) {
+    public BookingDto createBooking(@RequestHeader(USER_ID_HEADER) Long userId, @Valid @RequestBody BookingRequestDto dto) {
         return bookingService.create(userId, dto);
     }
 
@@ -55,15 +56,15 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getBookingsForBooker(@RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestParam(defaultValue = "ALL") BookingState state,
-            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                 @RequestParam(defaultValue = "ALL") BookingState state,
+                                                 @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByBooker(userId, state, pageable);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsForOwner(@RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestParam(defaultValue = "ALL") BookingState state,
-            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                @RequestParam(defaultValue = "ALL") BookingState state,
+                                                @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByOwner(userId, state, pageable);
     }
 }
