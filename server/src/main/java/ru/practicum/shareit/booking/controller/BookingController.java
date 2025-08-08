@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,7 +14,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.exception.EntityNotFoundException;
 
 import java.util.List;
 
@@ -24,13 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     public static final String USER_ID_HEADER = "X-Sharer-User-Id";
-
     private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingDto createBooking(@RequestHeader(USER_ID_HEADER) Long userId, @Valid @RequestBody BookingRequestDto dto) {
+    public BookingDto createBooking(@RequestHeader(USER_ID_HEADER) Long userId, @RequestBody BookingRequestDto dto) {
         return bookingService.create(userId, dto);
     }
 
@@ -58,15 +55,15 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getBookingsForBooker(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                 @RequestParam(defaultValue = "ALL") BookingState state,
-                                                 @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(defaultValue = "ALL") BookingState state,
+            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByBooker(userId, state, pageable);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsForOwner(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                @RequestParam(defaultValue = "ALL") BookingState state,
-                                                @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(defaultValue = "ALL") BookingState state,
+            @PageableDefault(sort = "start", direction = Sort.Direction.DESC) Pageable pageable) {
         return bookingService.findByOwner(userId, state, pageable);
     }
 }
