@@ -27,7 +27,7 @@ public class ItemMapper {
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                item.getRequest(),
+                item.getRequestId(),
                 lastBooking,
                 nextBooking,
                 comments
@@ -44,7 +44,7 @@ public class ItemMapper {
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
         item.setAvailable(dto.getAvailable());
-        item.setRequest(dto.getRequestId());
+        item.setRequestId(dto.getRequestId());
         return item;
     }
 }

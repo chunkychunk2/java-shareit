@@ -121,7 +121,7 @@ public class ItemRequestControllerTest {
         item.setDescription("For a tea");
         item.setAvailable(true);
         item.setOwner(other);
-        item.setRequest(r.getId());
+        item.setRequestId(r.getId());
         itemRepo.save(item);
 
         // другой пользователь запрашивает

@@ -86,7 +86,7 @@ public class ItemRequestServiceImplTest {
         item.setDescription("Need a book for Java");
         item.setAvailable(true);
         item.setOwner(other);
-        item.setRequest(r1.getId());
+        item.setRequestId(r1.getId());
         itemRepository.save(item);
 
         List<ItemRequestDto> list = requestService.findByUser(requester.getId());
@@ -112,7 +112,7 @@ public class ItemRequestServiceImplTest {
         item.setDescription("For IT");
         item.setAvailable(true);
         item.setOwner(other);
-        item.setRequest(r.getId());
+        item.setRequestId(r.getId());
         itemRepository.save(item);
 
         ItemRequestDto dto = requestService.findById(requester.getId(), r.getId());
