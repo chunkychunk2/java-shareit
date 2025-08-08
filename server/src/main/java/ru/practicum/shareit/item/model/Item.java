@@ -34,7 +34,7 @@ public class Item {
     User owner;
 
     @Column(name = "request_id")
-    Long request;
+    Long requestId;
 
     @Override
     public boolean equals(Object o) {

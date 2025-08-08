@@ -1,11 +1,9 @@
 package ru.practicum.shareit.user.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.EntityNotFoundException;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -14,18 +12,17 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
-@Validated
 public class UserController {
     private final UserService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
+    public UserDto create(@RequestBody UserDto userDto) {
         return service.create(userDto);
     }
 
     @PutMapping
-    public UserDto update(@Valid @RequestBody UserDto userDto) {
+    public UserDto update(@RequestBody UserDto userDto) {
         return service.update(userDto);
     }
 
@@ -38,7 +35,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         return service.getById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @GetMapping
