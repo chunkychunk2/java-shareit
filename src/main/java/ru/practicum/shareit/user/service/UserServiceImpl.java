@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
             userValidator.validateEmailIsUnique(dto.getEmail(), dto.getId());
             existing.setEmail(dto.getEmail());
         }
-        return UserMapper.toDto(repository.update(existing));
+        return UserMapper.toDto(repository.save(existing));
     }
 
     @Override
@@ -54,6 +54,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
