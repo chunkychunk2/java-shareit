@@ -13,7 +13,9 @@ import ru.practicum.shareit.request.validation.ItemRequestValidator;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.validation.UserValidator;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,10 +38,21 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> findByUser(Long userId) {
         userValidator.validateUserExists(userId);
-        return requestRepository.findByRequesterIdOrderByCreatedDesc(userId).stream()
-                .map(r -> {
-                    List<Item> items = itemRepository.findByRequestId(r.getId());
-                    return ItemRequestMapper.toDto(r, items);
+        List<ItemRequest> requests = requestRepository.findByRequesterIdOrderByCreatedDesc(userId);
+
+        List<Long> requestIds = requests.stream()
+                .map(ItemRequest::getId)
+                .collect(Collectors.toList());
+
+        List<Item> items = itemRepository.findByRequestIdIn(requestIds);
+
+        Map<Long, List<Item>> itemsByRequest = items.stream()
+                .collect(Collectors.groupingBy(Item::getRequestId));
+
+        return requests.stream()
+                .map(request -> {
+                    List<Item> requestItems = itemsByRequest.getOrDefault(request.getId(), Collections.emptyList());
+                    return ItemRequestMapper.toDto(request, requestItems);
                 })
                 .collect(Collectors.toList());
     }
@@ -47,10 +60,21 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> findAll(Long userId) {
         userValidator.validateUserExists(userId);
-        return requestRepository.findByRequesterIdNotOrderByCreatedDesc(userId).stream()
-                .map(r -> {
-                    List<Item> items = itemRepository.findByRequestId(r.getId());
-                    return ItemRequestMapper.toDto(r, items);
+        List<ItemRequest> requests = requestRepository.findByRequesterIdNotOrderByCreatedDesc(userId);
+
+        List<Long> requestIds = requests.stream()
+                .map(ItemRequest::getId)
+                .collect(Collectors.toList());
+
+        List<Item> items = itemRepository.findByRequestIdIn(requestIds);
+
+        Map<Long, List<Item>> itemsByRequest = items.stream()
+                .collect(Collectors.groupingBy(Item::getRequestId));
+
+        return requests.stream()
+                .map(request -> {
+                    List<Item> requestItems = itemsByRequest.getOrDefault(request.getId(), Collections.emptyList());
+                    return ItemRequestMapper.toDto(request, requestItems);
                 })
                 .collect(Collectors.toList());
     }
